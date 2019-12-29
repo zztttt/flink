@@ -229,7 +229,18 @@ under the License.
 						</goals>
 						<configuration>
 							<nodeVersion>v10.9.0</nodeVersion>
-							<downloadRoot>http://npm.taobao.org/mirrors/node/</downloadRoot>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>ci --cache-max=0 --no-save</arguments>
+							<environmentVariables>
+								<HUSKY_SKIP_INSTALL>true</HUSKY_SKIP_INSTALL>
+							</environmentVariables>
 						</configuration>
 					</execution>
 					<execution>
