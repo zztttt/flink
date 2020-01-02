@@ -275,7 +275,6 @@ public class PendingCheckpoint {
 						finalizedLocation);
 
 				onCompletionPromise.complete(completed);
-
 				// to prevent null-pointers from concurrent modification, copy reference onto stack
 				PendingCheckpointStats statsCallback = this.statsCallback;
 				if (statsCallback != null) {

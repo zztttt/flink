@@ -83,13 +83,14 @@ public class Checkpoints {
 			DataOutputStream out) throws IOException {
 		LOG.info("start to write : {}", checkpointMetadata.toString());
 		// write generic header
+		LOG.info("write generic header : {}", HEADER_MAGIC_NUMBER);
 		out.writeInt(HEADER_MAGIC_NUMBER);
 		out.writeInt(checkpointMetadata.getVersion());
 
 		// write checkpoint metadata
 		SavepointSerializer<T> serializer = SavepointSerializers.getSerializer(checkpointMetadata);
 		serializer.serialize(checkpointMetadata, out);
-		LOG.info("end up writing:");
+		LOG.info("end up writing");
 	}
 
 	// ------------------------------------------------------------------------

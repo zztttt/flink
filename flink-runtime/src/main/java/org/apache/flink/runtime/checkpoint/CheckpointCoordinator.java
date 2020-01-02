@@ -828,6 +828,7 @@ public class CheckpointCoordinator {
 			try {
 				LOG.info("start to finalize checkpoint:{}", pendingCheckpoint.getCheckpointId());
 				completedCheckpoint = pendingCheckpoint.finalizeCheckpoint();
+				LOG.info("CompletedCheckpoint is : {}", completedCheckpoint.toString());
 
 			}
 			catch (Exception e1) {
