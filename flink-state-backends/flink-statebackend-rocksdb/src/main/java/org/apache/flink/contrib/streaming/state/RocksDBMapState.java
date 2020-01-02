@@ -129,7 +129,7 @@ class RocksDBMapState<K, N, UK, UV>
 
 		byte[] rawKeyBytes = serializeCurrentKeyWithGroupAndNamespacePlusUserKey(userKey, userKeySerializer);
 		byte[] rawValueBytes = serializeValueNullSensitive(userValue, userValueSerializer);
-
+		LOG.info("rocksdb is ready to put data ! ! ! ");
 		backend.db.put(columnFamily, writeOptions, rawKeyBytes, rawValueBytes);
 	}
 

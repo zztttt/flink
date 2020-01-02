@@ -84,6 +84,7 @@ public class Checkpoints {
 		LOG.info("start to write : {}", checkpointMetadata.toString());
 		// write generic header
 		LOG.info("write generic header : {}", HEADER_MAGIC_NUMBER);
+		LOG.info("out is : {}", out.toString());
 		out.writeInt(HEADER_MAGIC_NUMBER);
 		out.writeInt(checkpointMetadata.getVersion());
 

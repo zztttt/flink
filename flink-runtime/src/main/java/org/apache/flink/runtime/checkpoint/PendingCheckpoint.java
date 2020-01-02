@@ -18,6 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
+import javafx.print.Collation;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.checkpoint.savepoint.Savepoint;
 import org.apache.flink.runtime.checkpoint.savepoint.SavepointV2;
@@ -38,12 +39,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledFuture;
@@ -259,8 +255,20 @@ public class PendingCheckpoint {
 				try (CheckpointMetadataOutputStream out = targetLocation.createMetadataOutputStream()) {
 					LOG.info("start to write out metadata in {}", targetLocation.toString());
 					LOG.info("metadata is a savepoint: {}", savepoint.toString());
+
+					// show metadata details
+					Collection<OperatorState> operatorStates = savepoint.getOperatorStates();
+					Collection<MasterState> masterStates = savepoint.getMasterStates();
+					for(OperatorState op: operatorStates){
+						LOG.info("operator state: {}", op.toString());
+					}
+					for(MasterState ms: masterStates){
+						LOG.info("master state: {}", ms.toString());
+					}
+
 					Checkpoints.storeCheckpointMetadata(savepoint, out);
 					finalizedLocation = out.closeAndFinalizeCheckpoint();
+					LOG.info("finalizedLocation is : {}", finalizedLocation.toString());
 					LOG.info("end up writing out metadata");
 				}
 
