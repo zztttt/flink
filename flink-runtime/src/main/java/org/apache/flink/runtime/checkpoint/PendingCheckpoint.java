@@ -257,8 +257,10 @@ public class PendingCheckpoint {
 				final CompletedCheckpointStorageLocation finalizedLocation;
 
 				try (CheckpointMetadataOutputStream out = targetLocation.createMetadataOutputStream()) {
+					LOG.info("start to write out metadata");
 					Checkpoints.storeCheckpointMetadata(savepoint, out);
 					finalizedLocation = out.closeAndFinalizeCheckpoint();
+					LOG.info("end up writing out metadata");
 				}
 
 				CompletedCheckpoint completed = new CompletedCheckpoint(

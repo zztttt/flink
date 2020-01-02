@@ -827,6 +827,7 @@ public class CheckpointCoordinator {
 		try {
 			try {
 				completedCheckpoint = pendingCheckpoint.finalizeCheckpoint();
+				LOG.info("start to finalize checkpoint:{}", completedCheckpoint.getCheckpointID());
 			}
 			catch (Exception e1) {
 				// abort the current pending checkpoint if we fails to finalize the pending checkpoint.
