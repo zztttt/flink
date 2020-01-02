@@ -81,7 +81,7 @@ public class Checkpoints {
 	public static <T extends Savepoint> void storeCheckpointMetadata(
 			T checkpointMetadata,
 			DataOutputStream out) throws IOException {
-
+		LOG.info("start to write : {}", checkpointMetadata.toString());
 		// write generic header
 		out.writeInt(HEADER_MAGIC_NUMBER);
 		out.writeInt(checkpointMetadata.getVersion());
@@ -89,6 +89,7 @@ public class Checkpoints {
 		// write checkpoint metadata
 		SavepointSerializer<T> serializer = SavepointSerializers.getSerializer(checkpointMetadata);
 		serializer.serialize(checkpointMetadata, out);
+		LOG.info("end up writing:");
 	}
 
 	// ------------------------------------------------------------------------
