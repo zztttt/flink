@@ -18,7 +18,6 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import javafx.print.Collation;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.checkpoint.savepoint.Savepoint;
 import org.apache.flink.runtime.checkpoint.savepoint.SavepointV2;
