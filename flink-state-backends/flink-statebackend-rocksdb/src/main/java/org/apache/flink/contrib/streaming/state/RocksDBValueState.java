@@ -95,6 +95,7 @@ class RocksDBValueState<K, N, V>
 
 	@Override
 	public void update(V value) {
+		System.out.println("rocksdb update....");
 		if (value == null) {
 			clear();
 			return;

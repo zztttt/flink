@@ -243,7 +243,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 		boolean disposed = false;
 		try {
 			// -------- Initialize ---------
-			LOG.debug("Initializing {}.", getName());
+			LOG.debug("invoke(): Initializing {}.", getName());
 
 			asyncOperationsThreadPool = Executors.newCachedThreadPool(new ExecutorThreadFactory("AsyncOperations", FatalExitExceptionHandler.INSTANCE));
 
@@ -257,6 +257,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 
 			stateBackend = createStateBackend();
 			checkpointStorage = stateBackend.createCheckpointStorage(getEnvironment().getJobID());
+			LOG.info("finish creating stateBackend: {}", stateBackend.toString());
 
 			// if the clock is not already set, then assign a default TimeServiceProvider
 			if (timerService == null) {
