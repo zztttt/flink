@@ -1053,6 +1053,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 		}
 
 		public void executeCheckpointing() throws Exception {
+			LOG.info("executeCheckpointing()----------");
 			startSyncPartNano = System.nanoTime();
 
 			try {

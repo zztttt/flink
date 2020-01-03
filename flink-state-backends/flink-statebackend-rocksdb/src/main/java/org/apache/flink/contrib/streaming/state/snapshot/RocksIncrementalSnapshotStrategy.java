@@ -151,14 +151,23 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 		@Nonnull CheckpointStreamFactory checkpointStreamFactory,
 		@Nonnull CheckpointOptions checkpointOptions) throws Exception {
 
+		LOG.info("this is Incremental's implementation of doSnapshot");
 		final SnapshotDirectory snapshotDirectory = prepareLocalSnapshotDirectory(checkpointId);
 		LOG.info("Local RocksDB checkpoint goes to backup path {}.", snapshotDirectory);
 
+		// RocksDBIncrementalRestoreOperation 中 kvStateInformation 赋值
+		// (RocksFullSnapshotStrategy 和 RocksIncrementalSnapshotStrategy 对应的 kvStateInformation 是一样的 )
+
+		// kvStateInformation.put(columnFamilyName, registeredColumn(RocksDBKeyedStateBackend.RocksDbKvStateInfo));
 		final List<StateMetaInfoSnapshot> stateMetaInfoSnapshots = new ArrayList<>(kvStateInformation.size());
+
+		//对 meta data 做全量 snapshot ，并将结果赋值给 stateMetaInfoSnapshots
 		final Set<StateHandleID> baseSstFiles = snapshotMetaData(checkpointId, stateMetaInfoSnapshots);
 
+		// 对 rocksdb 做 checkpoint 为 RocksDBIncrementalSnapshotOperation.uploadSstFiles 做准备
 		takeDBNativeCheckpoint(snapshotDirectory);
 
+		// snapshot
 		final RocksDBIncrementalSnapshotOperation snapshotOperation =
 			new RocksDBIncrementalSnapshotOperation(
 				checkpointId,
@@ -167,6 +176,7 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 				baseSstFiles,
 				stateMetaInfoSnapshots);
 
+		// 执行增量快照
 		return snapshotOperation.toAsyncSnapshotFutureTask(cancelStreamRegistry);
 	}
 
@@ -299,6 +309,7 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 		@Override
 		protected SnapshotResult<KeyedStateHandle> callInternal() throws Exception {
 
+			LOG.info("this is callInternal()-----------");
 			boolean completed = false;
 
 			// Handle to the meta data file
@@ -310,6 +321,8 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 
 			try {
 
+				// 写 meta 到 hdfs
+				LOG.info("write metadata to hdfs");
 				metaStateHandle = materializeMetaData();
 
 				// Sanity checks - they should never fail
@@ -317,6 +330,10 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 				Preconditions.checkNotNull(metaStateHandle.getJobManagerOwnedSnapshot(),
 					"Metadata for job manager was not properly created.");
 
+				// 将新产生的 sst file、misc file upload to checkpointFs
+				LOG.info("upload new sst file, misc file tp checkpointFs");
+				LOG.info("ssetFiles: {}", sstFiles.toString());
+				LOG.info("miscFiles: {}", miscFiles.toString());
 				uploadSstFiles(sstFiles, miscFiles);
 
 				synchronized (materializedSstFiles) {
@@ -332,10 +349,12 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 						miscFiles,
 						metaStateHandle.getJobManagerOwnedSnapshot());
 
+				//PermanentSnapshotDirectory
 				final DirectoryStateHandle directoryStateHandle = localBackupDirectory.completeSnapshotAndGetHandle();
 				final SnapshotResult<KeyedStateHandle> snapshotResult;
 				if (directoryStateHandle != null && metaStateHandle.getTaskLocalSnapshot() != null) {
 
+					//增量的 localSnapshot
 					IncrementalLocalKeyedStateHandle localDirKeyedStateHandle =
 						new IncrementalLocalKeyedStateHandle(
 							backendUID,
@@ -345,8 +364,10 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 							metaStateHandle.getTaskLocalSnapshot(),
 							sstFiles.keySet());
 
+					// localSnapshot report to local state manager, jobManagerState(jmIncrementalKeyedStateHandle) report to job manager
 					snapshotResult = SnapshotResult.withLocalState(jmIncrementalKeyedStateHandle, localDirKeyedStateHandle);
 				} else {
+					//jobManagerState(jmIncrementalKeyedStateHandle) report to job manager
 					snapshotResult = SnapshotResult.of(jmIncrementalKeyedStateHandle);
 				}
 

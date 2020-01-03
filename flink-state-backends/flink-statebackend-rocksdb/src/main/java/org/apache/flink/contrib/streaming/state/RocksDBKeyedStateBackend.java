@@ -420,6 +420,7 @@ public class RocksDBKeyedStateBackend<K> extends AbstractKeyedStateBackend<K> {
 		@Nonnull CheckpointOptions checkpointOptions) throws Exception {
 
 		LOG.info("this is what I want to arrive!!!!!!!!!!!!");
+		LOG.info("this is RocksDBKeyStateBackend's log");
 
 		long startTime = System.currentTimeMillis();
 
@@ -430,6 +431,7 @@ public class RocksDBKeyedStateBackend<K> extends AbstractKeyedStateBackend<K> {
 			CheckpointType.SAVEPOINT == checkpointOptions.getCheckpointType() ?
 				savepointSnapshotStrategy : checkpointSnapshotStrategy;
 
+		LOG.info("choose the snapshotstrategy : {}", chosenSnapshotStrategy.toString());
 		RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshotRunner =
 			chosenSnapshotStrategy.snapshot(checkpointId, timestamp, streamFactory, checkpointOptions);
 
