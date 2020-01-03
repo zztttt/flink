@@ -23,6 +23,8 @@ import org.apache.flink.core.memory.DataOutputView;
 import org.apache.flink.core.memory.DataOutputViewStreamWrapper;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.state.metainfo.StateMetaInfoSnapshot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 
@@ -38,6 +40,9 @@ import java.util.concurrent.RunnableFuture;
  * Snapshot strategy for this backend.
  */
 class DefaultOperatorStateBackendSnapshotStrategy extends AbstractSnapshotStrategy<OperatorStateHandle> {
+
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractSnapshotStrategy.class);
+
 	private final ClassLoader userClassLoader;
 	private final boolean asynchronousSnapshots;
 	private final Map<String, PartitionableListState<?>> registeredOperatorStates;
@@ -66,6 +71,7 @@ class DefaultOperatorStateBackendSnapshotStrategy extends AbstractSnapshotStrate
 		@Nonnull final CheckpointStreamFactory streamFactory,
 		@Nonnull final CheckpointOptions checkpointOptions) throws IOException {
 
+		LOG.info("I don't know what it is...");
 		if (registeredOperatorStates.isEmpty() && registeredBroadcastStates.isEmpty()) {
 			return DoneFuture.of(SnapshotResult.empty());
 		}

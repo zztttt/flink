@@ -152,7 +152,7 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 		@Nonnull CheckpointOptions checkpointOptions) throws Exception {
 
 		final SnapshotDirectory snapshotDirectory = prepareLocalSnapshotDirectory(checkpointId);
-		LOG.trace("Local RocksDB checkpoint goes to backup path {}.", snapshotDirectory);
+		LOG.info("Local RocksDB checkpoint goes to backup path {}.", snapshotDirectory);
 
 		final List<StateMetaInfoSnapshot> stateMetaInfoSnapshots = new ArrayList<>(kvStateInformation.size());
 		final Set<StateHandleID> baseSstFiles = snapshotMetaData(checkpointId, stateMetaInfoSnapshots);

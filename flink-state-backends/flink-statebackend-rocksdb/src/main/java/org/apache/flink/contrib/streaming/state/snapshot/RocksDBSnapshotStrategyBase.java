@@ -116,6 +116,7 @@ public abstract class RocksDBSnapshotStrategyBase<K>
 		@Nonnull CheckpointStreamFactory streamFactory,
 		@Nonnull CheckpointOptions checkpointOptions) throws Exception {
 
+		LOG.info("this is RocksDBSnapshotStrategyBase's log");
 		if (kvStateInformation.isEmpty()) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Asynchronous RocksDB snapshot performed on empty keyed state at {}. Returning null.",

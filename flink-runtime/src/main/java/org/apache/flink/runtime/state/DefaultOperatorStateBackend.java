@@ -255,6 +255,7 @@ public class DefaultOperatorStateBackend implements OperatorStateBackend {
 		@Nonnull CheckpointStreamFactory streamFactory,
 		@Nonnull CheckpointOptions checkpointOptions) throws Exception {
 
+		LOG.info("this is DefaultOperatorStateBackend's snapshot:");
 		long syncStartTime = System.currentTimeMillis();
 
 		RunnableFuture<SnapshotResult<OperatorStateHandle>> snapshotRunner =

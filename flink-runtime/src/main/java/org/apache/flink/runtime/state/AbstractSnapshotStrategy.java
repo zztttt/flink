@@ -47,6 +47,7 @@ public abstract class AbstractSnapshotStrategy<T extends StateObject> implements
 	 * Logs the duration of the synchronous snapshot part from the given start time.
 	 */
 	public void logSyncCompleted(@Nonnull Object checkpointOutDescription, long startTime) {
+		LOG.info("log_sync: {}", checkpointOutDescription.toString());
 		logCompletedInternal(LOG_SYNC_COMPLETED_TEMPLATE, checkpointOutDescription, startTime);
 	}
 
@@ -54,6 +55,7 @@ public abstract class AbstractSnapshotStrategy<T extends StateObject> implements
 	 * Logs the duration of the asynchronous snapshot part from the given start time.
 	 */
 	public void logAsyncCompleted(@Nonnull Object checkpointOutDescription, long startTime) {
+		LOG.info("log_async: {}", checkpointOutDescription.toString());
 		logCompletedInternal(LOG_ASYNC_COMPLETED_TEMPLATE, checkpointOutDescription, startTime);
 	}
 

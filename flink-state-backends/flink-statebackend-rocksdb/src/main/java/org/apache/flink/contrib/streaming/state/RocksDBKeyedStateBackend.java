@@ -419,6 +419,8 @@ public class RocksDBKeyedStateBackend<K> extends AbstractKeyedStateBackend<K> {
 		@Nonnull final CheckpointStreamFactory streamFactory,
 		@Nonnull CheckpointOptions checkpointOptions) throws Exception {
 
+		LOG.info("this is what I want to arrive!!!!!!!!!!!!");
+
 		long startTime = System.currentTimeMillis();
 
 		// flush everything into db before taking a snapshot

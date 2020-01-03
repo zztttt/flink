@@ -255,6 +255,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 
 			asynchronousCheckpointExceptionHandler = new AsyncCheckpointExceptionHandler(this);
 
+			LOG.info("start to createStateBackend()");
 			stateBackend = createStateBackend();
 			checkpointStorage = stateBackend.createCheckpointStorage(getEnvironment().getJobID());
 			LOG.info("finish creating stateBackend: {}", stateBackend.toString());
@@ -619,6 +620,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 
 		LOG.debug("Starting checkpoint ({}) {} on task {}",
 			checkpointMetaData.getCheckpointId(), checkpointOptions.getCheckpointType(), getName());
+		LOG.info("checkpointMetaData is : {}", checkpointMetaData.toString());
 
 		synchronized (lock) {
 			if (isRunning) {

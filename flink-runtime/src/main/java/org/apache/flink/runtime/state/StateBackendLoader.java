@@ -94,7 +94,7 @@ public class StateBackendLoader {
 		checkNotNull(config, "config");
 		checkNotNull(classLoader, "classLoader");
 
-		logger.info("config is : {}", config.toString());
+		logger.info("loadStateBackendFromConfig(): config is : {}", config.toString());
 		final String backendName = config.getString(CheckpointingOptions.STATE_BACKEND);
 		if (backendName == null) {
 			return null;
