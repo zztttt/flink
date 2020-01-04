@@ -331,9 +331,14 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 					"Metadata for job manager was not properly created.");
 
 				// 将新产生的 sst file、misc file upload to checkpointFs
-				LOG.info("upload new sst file, misc file tp checkpointFs");
-				LOG.info("ssetFiles: {}", sstFiles.toString());
-				LOG.info("miscFiles: {}", miscFiles.toString());
+				LOG.info("upload new sst file, misc file to checkpointFs");
+				// print msg
+				for(Map.Entry<StateHandleID, StreamStateHandle> e: sstFiles.entrySet()){
+					LOG.info("sstFile: StateHandleID: {} StreamStateHandle: {}", e.getKey(), e.getValue());
+				}
+				for(Map.Entry<StateHandleID, StreamStateHandle> e: miscFiles.entrySet()){
+					LOG.info("miscFile: StateHandleID: {} StreamStateHandle: {}", e.getKey(), e.getValue());
+				}
 				uploadSstFiles(sstFiles, miscFiles);
 
 				synchronized (materializedSstFiles) {
