@@ -383,6 +383,7 @@ public class BarrierBuffer implements CheckpointBarrierHandler {
 	}
 
 	private void notifyCheckpoint(CheckpointBarrier checkpointBarrier) throws Exception {
+		LOG.info("notifyCheckpoint");
 		if (toNotifyOnCheckpoint != null) {
 			CheckpointMetaData checkpointMetaData =
 					new CheckpointMetaData(checkpointBarrier.getId(), checkpointBarrier.getTimestamp());

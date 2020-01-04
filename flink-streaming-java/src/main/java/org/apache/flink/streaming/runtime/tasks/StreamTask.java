@@ -560,6 +560,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 	@Override
 	public boolean triggerCheckpoint(CheckpointMetaData checkpointMetaData, CheckpointOptions checkpointOptions) throws Exception {
 		try {
+			LOG.info("triggerCheckpoint()");
 			// No alignment if we inject a checkpoint
 			CheckpointMetrics checkpointMetrics = new CheckpointMetrics()
 					.setBytesBufferedInAlignment(0L)
@@ -587,6 +588,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 			CheckpointMetrics checkpointMetrics) throws Exception {
 
 		try {
+			LOG.info("triggerCheckpointOnBarrier");
 			performCheckpoint(checkpointMetaData, checkpointOptions, checkpointMetrics);
 		}
 		catch (CancelTaskException e) {
@@ -620,7 +622,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 
 		LOG.debug("Starting checkpoint ({}) {} on task {}",
 			checkpointMetaData.getCheckpointId(), checkpointOptions.getCheckpointType(), getName());
-		LOG.info("checkpointMetaData is : {}", checkpointMetaData.toString());
+		// LOG.info("checkpointMetaData is : {}", checkpointMetaData.toString());
 
 		synchronized (lock) {
 			if (isRunning) {

@@ -60,6 +60,10 @@ public class WordCount {
 		// add checkpoints
 		CheckpointConfig config = env.getCheckpointConfig();
 		config.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+		// generate one checkpoint every 120s
+		env.enableCheckpointing(12000);
+		// allow only one checkpoint to be in progress at the same time
+		env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
 
 		// make parameters available in the web interface
 		env.getConfig().setGlobalJobParameters(params);

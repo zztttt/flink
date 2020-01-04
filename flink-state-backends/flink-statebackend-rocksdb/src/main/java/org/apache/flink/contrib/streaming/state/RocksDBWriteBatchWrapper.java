@@ -26,6 +26,8 @@ import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.WriteBatch;
 import org.rocksdb.WriteOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,6 +39,7 @@ import javax.annotation.Nullable;
  */
 public class RocksDBWriteBatchWrapper implements AutoCloseable {
 
+	private static final Logger LOG = LoggerFactory.getLogger(RocksDBWriteBatchWrapper.class);
 	private static final int MIN_CAPACITY = 100;
 	private static final int MAX_CAPACITY = 1000;
 	private static final int PER_RECORD_BYTES = 100;
@@ -91,6 +94,7 @@ public class RocksDBWriteBatchWrapper implements AutoCloseable {
 	}
 
 	public void flush() throws RocksDBException {
+		LOG.info("RocksDB is ready to write data");
 		if (options != null) {
 			db.write(options, batch);
 		} else {
