@@ -108,6 +108,7 @@ public class BackendRestorerProcedure<
 			if (restoreState.isEmpty()) {
 				LOG.debug("Creating {} with empty state.", logDescription);
 			} else {
+				LOG.info("restoreState size is: {}", restoreState.size());
 				if (LOG.isTraceEnabled()) {
 					LOG.trace("Creating {} and restoring with state {} from alternative ({}/{}).",
 						logDescription, restoreState, alternativeIdx, restoreOptions.size());

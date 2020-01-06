@@ -73,6 +73,7 @@ public class StateAssignmentOperation {
 	}
 
 	public void assignStates() {
+		LOG.info("===assignStates===");
 		Map<OperatorID, OperatorState> localOperators = new HashMap<>(operatorStates);
 
 		checkStateMappingCompleteness(allowNonRestoredState, operatorStates, tasks);
@@ -112,6 +113,7 @@ public class StateAssignmentOperation {
 
 	private void assignAttemptState(ExecutionJobVertex executionJobVertex, List<OperatorState> operatorStates) {
 
+		LOG.info("===assignAttemptState===");
 		List<OperatorID> operatorIDs = executionJobVertex.getOperatorIDs();
 
 		//1. first compute the new parallelism
@@ -196,8 +198,10 @@ public class StateAssignmentOperation {
 			Map<OperatorInstanceID, List<KeyedStateHandle>> subRawKeyedState,
 			int newParallelism) {
 
+		LOG.info("===assignTaskStateToExecutionJobVertices===");
 		List<OperatorID> operatorIDs = executionJobVertex.getOperatorIDs();
 
+		LOG.info("newParallelism: {}", newParallelism);
 		for (int subTaskIndex = 0; subTaskIndex < newParallelism; subTaskIndex++) {
 
 			Execution currentExecutionAttempt = executionJobVertex.getTaskVertices()[subTaskIndex]

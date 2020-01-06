@@ -358,6 +358,7 @@ public class Execution implements AccessExecution, Archiveable<ArchivedExecution
 	 * @param taskRestore information to restore the state
 	 */
 	public void setInitialState(@Nullable JobManagerTaskRestore taskRestore) {
+		LOG.info("===setInitialState=== ! ! ! ! ! !");
 		checkState(state == CREATED, "Can only assign operator state when execution attempt is in CREATED");
 		this.taskRestore = taskRestore;
 	}

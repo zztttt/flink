@@ -262,10 +262,14 @@ public class RocksDBKeyedStateBackendBuilder<K> extends AbstractKeyedStateBacken
 				nativeMetricMonitor = nativeMetricOptions.isEnabled() ?
 					new RocksDBNativeMetricMonitor(nativeMetricOptions, metricGroup, db) : null;
 			} else {
+
+				LOG.info("---real DB, not injectTestdb---");
 				prepareDirectories();
 				restoreOperation = getRocksDBRestoreOperation(
 					keyGroupPrefixBytes, cancelStreamRegistry, kvStateInformation, ttlCompactFiltersManager);
 				RocksDBRestoreResult restoreResult = restoreOperation.restore();
+
+				LOG.info("---get the RocksDBRestoreResult---");
 				db = restoreResult.getDb();
 				defaultColumnFamilyHandle = restoreResult.getDefaultColumnFamilyHandle();
 				nativeMetricMonitor = restoreResult.getNativeMetricMonitor();
@@ -486,7 +490,9 @@ public class RocksDBKeyedStateBackendBuilder<K> extends AbstractKeyedStateBacken
 	}
 
 	private void prepareDirectories() throws IOException {
+		LOG.info("---checkAndCreateDirectory: {}---", instanceBasePath.getPath());
 		checkAndCreateDirectory(instanceBasePath);
+		LOG.info("--instanceRocksDBpath: {}---", instanceRocksDBPath.getPath());
 		if (instanceRocksDBPath.exists()) {
 			// Clear the base directory when the backend is created
 			// in case something crashed and the backend never reached dispose()

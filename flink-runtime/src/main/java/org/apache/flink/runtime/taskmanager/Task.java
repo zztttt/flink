@@ -903,6 +903,7 @@ public class Task implements Runnable, TaskActions, CheckpointListener {
 	 * @return true if the transition was successful, otherwise false
 	 */
 	private boolean transitionState(ExecutionState currentState, ExecutionState newState, Throwable cause) {
+		LOG.info("transitionState");
 		if (STATE_UPDATER.compareAndSet(this, currentState, newState)) {
 			if (cause == null) {
 				LOG.info("{} ({}) switched from {} to {}.", taskNameWithSubtask, executionId, currentState, newState);

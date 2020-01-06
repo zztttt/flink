@@ -476,6 +476,7 @@ public class RocksDBStateBackend extends AbstractStateBackend implements Configu
 		@Nonnull Collection<KeyedStateHandle> stateHandles,
 		CloseableRegistry cancelStreamRegistry) throws IOException {
 
+		LOG.info("---createKeyedStateBackend---");
 		// first, make sure that the RocksDB JNI library is loaded
 		// we do this explicitly here to have better error handling
 		String tempDir = env.getTaskManagerInfo().getTmpDirectories()[0];

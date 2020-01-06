@@ -102,6 +102,7 @@ public class Checkpoints {
 		checkNotNull(in, "input stream");
 		checkNotNull(classLoader, "classLoader");
 
+		LOG.info("loading Checkpoint MetaData");
 		final int magicNumber = in.readInt();
 
 		if (magicNumber == HEADER_MAGIC_NUMBER) {
@@ -136,6 +137,7 @@ public class Checkpoints {
 		checkNotNull(location, "location");
 		checkNotNull(classLoader, "classLoader");
 
+		LOG.info("loadAndValidateCheckpoint. jobID: {}", jobId.toString());
 		final StreamStateHandle metadataHandle = location.getMetadataHandle();
 		final String checkpointPointer = location.getExternalPointer();
 
@@ -144,8 +146,10 @@ public class Checkpoints {
 		try (InputStream in = metadataHandle.openInputStream()) {
 			DataInputStream dis = new DataInputStream(in);
 			rawCheckpointMetadata = loadCheckpointMetadata(dis, classLoader);
+			LOG.info("load the savepoint rawCheckpointMetaData, its operatorStates' size is: {}", rawCheckpointMetadata.getOperatorStates().size());
 		}
 
+		// 看起来好像就是把V1的save point转换为V2的
 		final Savepoint checkpointMetadata = rawCheckpointMetadata.getTaskStates() == null ?
 				rawCheckpointMetadata :
 				SavepointV2.convertToOperatorStateSavepointV2(tasks, rawCheckpointMetadata);

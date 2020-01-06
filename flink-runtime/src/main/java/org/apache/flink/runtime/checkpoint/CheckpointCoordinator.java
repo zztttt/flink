@@ -1005,6 +1005,7 @@ public class CheckpointCoordinator {
 			Map<JobVertexID, ExecutionJobVertex> tasks,
 			boolean errorIfNoCheckpoint,
 			boolean allowNonRestoredState) throws Exception {
+		LOG.info("restoreLatestCheckpointedState");
 
 		synchronized (lock) {
 			if (shutdown) {
@@ -1028,6 +1029,7 @@ public class CheckpointCoordinator {
 			LOG.debug("Status of the shared state registry of job {} after restore: {}.", job, sharedStateRegistry);
 
 			// Restore from the latest checkpoint
+			LOG.info("restore from the latest checkpoint");
 			CompletedCheckpoint latest = completedCheckpointStore.getLatestCheckpoint();
 
 			if (latest == null) {
@@ -1044,12 +1046,16 @@ public class CheckpointCoordinator {
 			LOG.info("Restoring job {} from latest valid checkpoint: {}.", job, latest);
 
 			// re-assign the task states
+			// !!!!!!!!!!!!! how to generate operatorState ???
 			final Map<OperatorID, OperatorState> operatorStates = latest.getOperatorStates();
+			LOG.info("operatorStates.size is : {}", operatorStates.size());
 
 			StateAssignmentOperation stateAssignmentOperation =
 					new StateAssignmentOperation(latest.getCheckpointID(), tasks, operatorStates, allowNonRestoredState);
 
+			LOG.info("! ! ! start to assignStates ! ! !");
 			stateAssignmentOperation.assignStates();
+			LOG.info("! ! ! end up  assignStates ! ! !");
 
 			// call master hooks for restore
 
@@ -1098,7 +1104,7 @@ public class CheckpointCoordinator {
 		Preconditions.checkNotNull(savepointPointer, "The savepoint path cannot be null.");
 
 		LOG.info("Starting job {} from savepoint {} ({})",
-				job, savepointPointer, (allowNonRestored ? "allowing non restored state" : ""));
+				job, savepointPointer, (allowNonRestored ? "allowing non restored state" : "allowRestore"));
 
 		final CompletedCheckpointStorageLocation checkpointLocation = checkpointStorage.resolveCheckpoint(savepointPointer);
 

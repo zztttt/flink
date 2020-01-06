@@ -132,7 +132,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 	 */
 	@Override
 	public RocksDBRestoreResult restore() throws Exception {
-		LOG.info("begin to restore checkpoint ! ! !");
+		LOG.info("---begin to restore checkpoint ! ! !---");
 
 		if (restoreStateHandles == null || restoreStateHandles.isEmpty()) {
 			return null;
@@ -150,7 +150,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 		} else {
 			restoreWithoutRescaling(theFirstStateHandle);
 		}
-		LOG.info("build RocksDBRestoreResult instance");
+		LOG.info("---build RocksDBRestoreResult instance---");
 		return new RocksDBRestoreResult(this.db, defaultColumnFamilyHandle,
 			nativeMetricMonitor, lastCompletedCheckpointId, backendUID, restoredSstFiles);
 	}
@@ -159,7 +159,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 	 * Recovery from a single remote incremental state without rescaling.
 	 */
 	private void restoreWithoutRescaling(KeyedStateHandle keyedStateHandle) throws Exception {
-		LOG.info("restore Without Rescaling--------------");
+		LOG.info("---restore Without Rescaling---");
 		if (keyedStateHandle instanceof IncrementalRemoteKeyedStateHandle) {
 			LOG.info("KeyedStateHnadle type is : Incremental  Remote  KeyedStateHandle");
 			IncrementalRemoteKeyedStateHandle incrementalRemoteKeyedStateHandle =
@@ -192,6 +192,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 	}
 
 	private void restoreFromRemoteState(IncrementalRemoteKeyedStateHandle stateHandle) throws Exception {
+		LOG.info("---restoreFromRemoteState---");
 		final Path tmpRestoreInstancePath = new Path(
 			instanceBasePath.getAbsolutePath(),
 			UUID.randomUUID().toString()); // used as restore source for IncrementalRemoteKeyedStateHandle
@@ -216,7 +217,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 		LOG.info("columnFamilyDescriptors size is:{}", columnFamilyDescriptors.size());
 		int i = 0;
 		for(ColumnFamilyDescriptor cd : columnFamilyDescriptors){
-			LOG.info("Descriptors[{}]: {}", i, cd.getName());
+			LOG.info("Descriptors[{}]: {}", i, new String(cd.getName()));
 		}
 		LOG.info("columnFamilyHandles size is: {}", columnFamilyHandles.size());
 		int j = 0;
@@ -237,6 +238,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 		restoreInstanceDirectoryFromPath(restoreSourcePath, dbPath);
 
 		LOG.info("---begin to openDB---");
+		// just remove the default column family which is located at the first index
 		openDB();
 
 		LOG.info("---begin to registerColumnFamilyHandles---");
@@ -290,7 +292,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 	 */
 	private void restoreWithRescaling(Collection<KeyedStateHandle> restoreStateHandles) throws Exception {
 
-		LOG.info("restore With Rescaling--------------");
+		LOG.info("---restore With Rescaling---");
 		// Prepare for restore with rescaling
 		KeyedStateHandle initialHandle = RocksDBIncrementalCheckpointUtils.chooseTheBestStateHandleForInitial(
 			restoreStateHandles, keyGroupRange);
@@ -483,6 +485,7 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 	 */
 	private void restoreInstanceDirectoryFromPath(Path source, String instanceRocksDBPath) throws IOException {
 
+		LOG.info("---restoreInstanceDirectoryFromPath---");
 		FileSystem fileSystem = source.getFileSystem();
 
 		final FileStatus[] fileStatuses = fileSystem.listStatus(source);
@@ -496,6 +499,8 @@ public class RocksDBIncrementalRestoreOperation<K> extends AbstractRocksDBRestor
 			final String fileName = filePath.getName();
 			File restoreFile = new File(source.getPath(), fileName);
 			File targetFile = new File(instanceRocksDBPath, fileName);
+			LOG.info("filePath: {}, fileName: {}", filePath.toString(), fileName);
+			LOG.info("restoreFile: {}, targetFile: {}", source.toString(), instanceRocksDBPath);
 			if (fileName.endsWith(SST_FILE_SUFFIX)) {
 				// hardlink'ing the immutable sst-files.
 				Files.createLink(targetFile.toPath(), restoreFile.toPath());

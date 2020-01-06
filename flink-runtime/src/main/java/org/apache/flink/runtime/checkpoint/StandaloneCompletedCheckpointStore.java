@@ -51,6 +51,7 @@ public class StandaloneCompletedCheckpointStore implements CompletedCheckpointSt
 	 *                                       in older checkpoints being discarded.
 	 */
 	public StandaloneCompletedCheckpointStore(int maxNumberOfCheckpointsToRetain) {
+		LOG.info("StandaloneCompletedCheckpointStore: maxNum is: {}", maxNumberOfCheckpointsToRetain);
 		checkArgument(maxNumberOfCheckpointsToRetain >= 1, "Must retain at least one checkpoint.");
 		this.maxNumberOfCheckpointsToRetain = maxNumberOfCheckpointsToRetain;
 		this.checkpoints = new ArrayDeque<>(maxNumberOfCheckpointsToRetain + 1);
