@@ -169,7 +169,7 @@ public class CepOperator<IN, KEY, OUT>
 	public void initializeState(StateInitializationContext context) throws Exception {
 		super.initializeState(context);
 
-		LOG.info("initializeState");
+		LOG.info("Cep Operator initializeState");
 		// initializeState through the provided context
 		computationStates = context.getKeyedStateStore().getState(
 			new ValueStateDescriptor<>(

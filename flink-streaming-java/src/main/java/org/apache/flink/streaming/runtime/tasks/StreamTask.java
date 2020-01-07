@@ -290,6 +290,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 				// so that we avoid race conditions in the case that initializeState()
 				// registers a timer, that fires before the open() is called.
 
+				LOG.info("Stream task lock: initializeState()");
 				initializeState();
 				openAllOperators();
 			}

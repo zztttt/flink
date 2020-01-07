@@ -103,7 +103,7 @@ public class StateBackendLoader {
 		// by default the factory class is the backend name 
 		String factoryClassName = backendName;
 
-		logger.info("backendName is : {}", backendName.toLowerCase());
+		//logger.info("backendName is : {}", backendName.toLowerCase());
 		switch (backendName.toLowerCase()) {
 			case MEMORY_STATE_BACKEND_NAME:
 				MemoryStateBackend memBackend = new MemoryStateBackendFactory().createFromConfig(config, classLoader);
