@@ -135,6 +135,7 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 			localRecoveryConfig,
 			cancelStreamRegistry);
 
+		LOG.info("---RocksIncrementalSnapshotStrategy Constructor---");
 		this.instanceBasePath = instanceBasePath;
 		this.backendUID = backendUID;
 		this.materializedSstFiles = materializedSstFiles;
@@ -241,7 +242,7 @@ public class RocksIncrementalSnapshotStrategy<K> extends RocksDBSnapshotStrategy
 			lastCompletedCheckpoint = lastCompletedCheckpointId;
 			baseSstFiles = materializedSstFiles.get(lastCompletedCheckpoint);
 		}
-		LOG.trace("Taking incremental snapshot for checkpoint {}. Snapshot is based on last completed checkpoint {} " +
+		LOG.info("Taking incremental snapshot for checkpoint {}. Snapshot is based on last completed checkpoint {} " +
 			"assuming the following (shared) files as base: {}.", checkpointId, lastCompletedCheckpoint, baseSstFiles);
 
 		// snapshot meta data to save

@@ -427,6 +427,7 @@ public class RocksDBKeyedStateBackendBuilder<K> extends AbstractKeyedStateBacken
 		UUID backendUID,
 		SortedMap<Long, Set<StateHandleID>> materializedSstFiles,
 		long lastCompletedCheckpointId) {
+		LOG.info("initializeSavepointAndCheckpointStrategies, with sstFiles' size: {}", materializedSstFiles.size());
 		RocksDBSnapshotStrategyBase<K> savepointSnapshotStrategy = new RocksFullSnapshotStrategy<>(
 			db,
 			rocksDBResourceGuard,
@@ -506,6 +507,7 @@ public class RocksDBKeyedStateBackendBuilder<K> extends AbstractKeyedStateBacken
 
 		SnapshotStrategy(RocksDBSnapshotStrategyBase<K> checkpointSnapshotStrategy,
 						RocksDBSnapshotStrategyBase<K> savepointSnapshotStrategy) {
+			LOG.info("---SnapshotStrategy<K> Constructor---");
 			this.checkpointSnapshotStrategy = checkpointSnapshotStrategy;
 			this.savepointSnapshotStrategy = savepointSnapshotStrategy;
 		}

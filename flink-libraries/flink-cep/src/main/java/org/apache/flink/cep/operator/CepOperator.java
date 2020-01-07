@@ -169,6 +169,7 @@ public class CepOperator<IN, KEY, OUT>
 	public void initializeState(StateInitializationContext context) throws Exception {
 		super.initializeState(context);
 
+		LOG.info("initializeState");
 		// initializeState through the provided context
 		computationStates = context.getKeyedStateStore().getState(
 			new ValueStateDescriptor<>(
@@ -187,6 +188,7 @@ public class CepOperator<IN, KEY, OUT>
 	}
 
 	private void migrateOldState() throws Exception {
+		LOG.info("migrateOldState");
 		getKeyedStateBackend().applyToAllKeys(
 			VoidNamespace.INSTANCE,
 			VoidNamespaceSerializer.INSTANCE,

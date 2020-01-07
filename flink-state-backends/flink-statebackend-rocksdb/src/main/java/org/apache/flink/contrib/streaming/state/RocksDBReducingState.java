@@ -29,6 +29,9 @@ import org.apache.flink.runtime.state.RegisteredKeyValueStateBackendMetaInfo;
 import org.apache.flink.runtime.state.internal.InternalReducingState;
 import org.apache.flink.util.FlinkRuntimeException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.rocksdb.ColumnFamilyHandle;
 
 import java.util.Collection;
@@ -44,6 +47,7 @@ class RocksDBReducingState<K, N, V>
 	extends AbstractRocksDBAppendingState<K, N, V, V, V>
 	implements InternalReducingState<K, N, V> {
 
+	private static final Logger LOG = LoggerFactory.getLogger(RocksDBReducingState.class);
 	/** User-specified reduce function. */
 	private final ReduceFunction<V> reduceFunction;
 
@@ -90,6 +94,7 @@ class RocksDBReducingState<K, N, V>
 
 	@Override
 	public void add(V value) throws Exception {
+		LOG.info("add ! ! !");
 		byte[] key = getKeyBytes();
 		V oldValue = getInternal(key);
 		V newValue = oldValue == null ? value : reduceFunction.reduce(oldValue, value);
@@ -98,6 +103,7 @@ class RocksDBReducingState<K, N, V>
 
 	@Override
 	public void mergeNamespaces(N target, Collection<N> sources) {
+		LOG.info("mergeNamespaces");
 		if (sources == null || sources.isEmpty()) {
 			return;
 		}
@@ -160,6 +166,7 @@ class RocksDBReducingState<K, N, V>
 		StateDescriptor<S, SV> stateDesc,
 		Tuple2<ColumnFamilyHandle, RegisteredKeyValueStateBackendMetaInfo<N, SV>> registerResult,
 		RocksDBKeyedStateBackend<K> backend) {
+		LOG.info("create ! ! !");
 		return (IS) new RocksDBReducingState<>(
 			registerResult.f0,
 			registerResult.f1.getNamespaceSerializer(),

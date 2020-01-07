@@ -737,6 +737,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
 	}
 
 	private void initializeState() throws Exception {
+		LOG.info("StreamTask initializeState");
 
 		StreamOperator<?>[] allOperators = operatorChain.getAllOperators();
 

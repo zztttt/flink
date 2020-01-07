@@ -250,6 +250,7 @@ public class RocksDBKeyedStateBackend<K> extends AbstractKeyedStateBackend<K> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <N> Stream<K> getKeys(String state, N namespace) {
+		LOG.info("Get Keys");
 		RocksDbKvStateInfo columnInfo = kvStateInformation.get(state);
 		if (columnInfo == null || !(columnInfo.metaInfo instanceof RegisteredKeyValueStateBackendMetaInfo)) {
 			return Stream.empty();

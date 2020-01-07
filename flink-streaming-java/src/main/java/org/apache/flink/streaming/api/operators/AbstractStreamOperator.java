@@ -236,6 +236,7 @@ public abstract class AbstractStreamOperator<OUT>
 
 	@Override
 	public final void initializeState() throws Exception {
+		LOG.info("Abstractstreamoperator initializeState");
 
 		final TypeSerializer<?> keySerializer = config.getStateKeySerializer(getUserCodeClassloader());
 
